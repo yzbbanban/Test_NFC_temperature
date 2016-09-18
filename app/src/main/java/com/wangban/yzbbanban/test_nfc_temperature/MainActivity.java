@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    private PanelView mPanelView;
+    private ScaleView mPanelView;
     private Button btn;
     private Button btnClean;
     private int persent;
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mPanelView = (PanelView) findViewById(R.id.panel_view);
+        mPanelView = (ScaleView) findViewById(R.id.panel_view);
         btn = (Button) findViewById(R.id.btn_start_or_stop);
         btnClean = (Button) findViewById(R.id.btn_clean);
         mPanelView.setText("ban");

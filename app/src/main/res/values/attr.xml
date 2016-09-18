@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="PanelView">
+    <declare-styleable name="ScaleView">
         <attr name="arcColor" format="color"></attr>
         <attr name="arcWidth" format="dimension"></attr>
         <attr name="android:text"></attr>

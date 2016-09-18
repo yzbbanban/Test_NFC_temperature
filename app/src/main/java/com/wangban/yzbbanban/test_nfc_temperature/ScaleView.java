@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.icu.text.CurrencyPluralInfo;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -15,7 +14,7 @@ import android.view.View;
  * Created by YZBbanban on 16/9/17.
  */
 
-public class PanelView extends View {
+public class ScaleView extends View {
     private int mWidth;
     private int mHeight;
     private int mPercent;
@@ -37,25 +36,25 @@ public class PanelView extends View {
 
     private int mBackgroundColor;
 
-    public PanelView(Context context) {
+    public ScaleView(Context context) {
         this(context, null);
     }
 
-    public PanelView(Context context, AttributeSet attrs) {
+    public ScaleView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public PanelView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ScaleView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         //加载布局
         mContext = context;
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.PanelView, defStyleAttr, 0);
-        mArcColor = a.getColor(R.styleable.PanelView_arcColor, Color.parseColor("#ff0000"));
-        mMinCircleColor = a.getColor(R.styleable.PanelView_pointerColor, Color.parseColor("#00ffff"));
-        mTikeCount = a.getInt(R.styleable.PanelView_tikeCount, 12);
-        mTextSize = a.getDimensionPixelSize(PxUtils.spToPx(R.styleable.PanelView_android_textSize, mContext), 24);
-        mText = a.getString(R.styleable.PanelView_android_text);
-        mBackgroundColor = a.getColor(R.styleable.PanelView_android_background, Color.parseColor("#0000ff"));
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ScaleView, defStyleAttr, 0);
+        mArcColor = a.getColor(R.styleable.ScaleView_arcColor, Color.parseColor("#ff0000"));
+        mMinCircleColor = a.getColor(R.styleable.ScaleView_pointerColor, Color.parseColor("#00ffff"));
+        mTikeCount = a.getInt(R.styleable.ScaleView_tikeCount, 12);
+        mTextSize = a.getDimensionPixelSize(PxUtils.spToPx(R.styleable.ScaleView_android_textSize, mContext), 24);
+        mText = a.getString(R.styleable.ScaleView_android_text);
+        mBackgroundColor = a.getColor(R.styleable.ScaleView_android_background, Color.parseColor("#0000ff"));
         mScendArcWidth = 50;
 
 
@@ -87,7 +86,7 @@ public class PanelView extends View {
         Paint p = new Paint();
 //        描边的宽
         int strokeWidth = 20;
-//        设置秒编的宽
+//        设置描边的宽
         p.setStrokeWidth(strokeWidth);
 //        一直存在
         p.setAntiAlias(true);
@@ -148,6 +147,13 @@ public class PanelView extends View {
         mTikeWidth = 20;
         p.setStrokeWidth(3);
         canvas.drawLine(mWidth / 2, 0.0f, mWidth / 2, mTikeWidth, p);
+        //        温度
+        p.setColor(Color.GREEN);
+        p.setStrokeWidth(3);
+        p.setTextSize(40);
+        String tText = "温度";
+        float tLength = p.measureText(tText);
+        canvas.drawText(tText, (mWidth - tLength) / 2, secondRectHeight / 2, p);
 //        旋转角度
         float rAngle = 250f / mTikeCount;
 //        通过旋转画布,绘制右面的刻度
@@ -187,6 +193,33 @@ public class PanelView extends View {
         p.setColor(mTextColor);
         float textLength = p.measureText(mText);
         canvas.drawText(mText, (mWidth - textLength) / 2, rectBottomY + 40, p);
+
+
+//        刻度数字
+        p.setColor(Color.DKGRAY);
+        p.setStrokeWidth(2);
+        p.setTextSize(24);
+        String scaleText = "6";
+        float sLength = p.measureText(scaleText);
+        canvas.drawText(scaleText, (mWidth - sLength) / 2, mHeight / 2 - secondRectHeight / 2 + 10, p);
+
+
+        float scaleTextAngle = 250 / mTikeCount;//配合双数,在中心
+        for (int i = 0; i < mTikeCount / 2; i++) {
+            String sText = String.valueOf(i + 7);
+            canvas.rotate(scaleTextAngle, mWidth / 2, mHeight / 2);
+            canvas.drawText(sText, (mWidth - sLength) / 2, mHeight / 2 - secondRectHeight / 2 + 10, p);
+        }
+        canvas.rotate(-scaleTextAngle * mTikeCount / 2, mWidth / 2, mHeight / 2);
+        scaleTextAngle = 250f / mTikeCount;
+        p.setTextSize(24);
+        for (int i = mTikeCount / 2 - 1; i >= 0; i--) {
+            String sText = String.valueOf(i);
+            canvas.rotate(-scaleTextAngle, mWidth / 2, mHeight / 2);
+            canvas.drawText(sText, (mWidth - sLength) / 2, mWidth / 2 - secondRectHeight / 2 + 10, p);
+        }
+        canvas.rotate(scaleTextAngle * mTikeCount / 2, mWidth / 2, mHeight / 2);
+
         super.draw(canvas);
     }
 
